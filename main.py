@@ -1,7 +1,9 @@
+import json
 from tkinter import *
 from tkinter import messagebox
 import random
 import pyperclip
+import json
 
 # global confirmWindow
 #----------------------------- POP UP SCREEN --------------------------------------#
@@ -86,6 +88,23 @@ def save():
         else:
             website_input.delete(0, END)
             password_input.delete(0,END)
+
+# ---------------------------- Search Engine ------------------------------- #
+def search_website():
+    website = website_input.get()
+    try:
+        with open("data.json", "r") as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error", message="No Data File Found.")
+    else:
+        if website in data:
+            email = data[website]['email']
+            password = data[website]['password']
+            messagebox.showinfo(title=website, message=f"Email: {email}\n Password: {password}")
+        else:
+            messagebox.showinfo(title="Error", message=f"No details for {website} exists.")
+
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
@@ -116,8 +135,13 @@ email_or_username_input = Entry(width=35)
 email_or_username_input.grid(column= 1, row = 2, columnspan = 2)
 email_or_username_input.insert(0, "dummy@gmail.com")
 #Password Input
-password_input = Entry(width=21)
-password_input.grid(column=1, row=3)
+password_input = Entry(width=35)
+password_input.grid(column=1, row=3, columnspan = 2)
+
+
+#Search Button
+search_button = Button(text= "Search", width= 10, command = search_website)
+search_button.grid(column = 2, row = 1, columnspan = 2)
 
 #Generate Password Button
 generate_password_button = Button(text= "Generate Password", width=10, command=generate_password)
