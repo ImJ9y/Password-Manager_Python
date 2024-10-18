@@ -47,16 +47,27 @@ def generate_password():
 def save():
     # global confirmWindow
     # confirmWindow.withdraw()
+    website = website_input.get()
+    email = email_or_username_input.get()
+    password = password_input.get()
+
+    new_data = {
+        website: {
+            "email": email,
+            "password": password
+        }
+    }
 
     if len(website_input.get()) == 0 or len(email_or_username_input.get()) == 0 or len(password_input.get()) == 0:
         messagebox.showinfo(title="Oops", message="Please make sure you haven't left any fields empty.")
     else:
-        confirm = messagebox.askokcancel(title=website_input.get(),
-                                         message=f"These are the details entered:\n Email: {email_or_username_input.get()}\nPassowrd: {password_input.get()}\n Is it Okay to save?")
+        confirm = messagebox.askokcancel(title= website,
+                                         message=f"These are the details entered:\n Email: {email}\nPassowrd: {password}\n Is it Okay to save?")
         if confirm:
-            with open("data.txt", mode = 'a') as file:
-                file.write(f"{website_input.get()} | {email_or_username_input.get()} | {password_input.get()}\n")
-
+             with open("data.json", "w") as file:
+                # Saving updated data
+                json.dump(new_data, file, indent=4)
+                 
                 website_input.delete(0, END)
                 password_input.delete(0, END)
         else:
